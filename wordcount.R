@@ -21,12 +21,11 @@ samp_clean = tm_map(samp, tolower)
 for(j in seq(samp_clean))   
 {   
   samp_clean[[j]] = iconv(samp_clean[[j]], to="ASCII", sub = "") 
-  samp_clean[[j]] <- gsub("/", " ", samp_clean[[j]])   
-  samp_clean[[j]] <- gsub("@", " ", samp_clean[[j]])   
-  samp_clean[[j]] <- gsub("\\|", " ", samp_clean[[j]])
-  samp_clean[[j]] <- gsub("[R]\\W", "_r_", samp_clean[[j]])
-  samp_clean[[j]] <- gsub("[C]\\+\\+", "_cpp_", samp_clean[[j]])
-  samp_clean[[j]] <- gsub("[C]\\W", "_c_", samp_clean[[j]])
+  samp_clean[[j]] <- gsub("/|@|\\|", " ", samp_clean[[j]])
+  samp_clean[[j]] <- gsub("(?<!\\w)r(?!\\w|&D)", "rlanguage", samp_clean[[j]], perl = TRUE) #R: Rlanguage
+  samp_clean[[j]] <- gsub("(?<!\\w)c(?!\\w|#|\\+)", "clanguage", samp_clean[[j]], perl = TRUE) #C: Clanguage
+  samp_clean[[j]] <- gsub("c\\+\\+", "cpp", samp_clean[[j]], perl = TRUE) # C++: cpp
+  samp_clean[[j]] <- gsub("c#", "csharp", samp_clean[[j]], perl =TRUE) # C# CSharp
 }  
 samp_clean = tm_map(samp_clean, PlainTextDocument)  
 samp_clean = tm_map(samp_clean, removePunctuation)

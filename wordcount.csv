@@ -29,6 +29,7 @@
 "contact",257
 "tools",252
 "statistical",249
+"rlanguage",243
 "etc",240
 "job",238
 "careers",236
@@ -280,9 +281,10 @@
 "reporting",61
 "security",61
 "via",61
+"cpp",60
 "database",60
 "good",60
-"r python",60
+"rlanguage python",60
 "sas",60
 "states",60
 "story",60
@@ -525,7 +527,6 @@
 "social media",38
 "way",38
 "business problems",37
-"c c",37
 "collaborative",37
 "customer success",37
 "full",37
@@ -548,7 +549,7 @@
 "medical dental vision",36
 "offer right candidate",36
 "platforms",36
-"python r",36
+"python rlanguage",36
 "right candidate",36
 "statistical analysis",36
 "videos",36
@@ -556,6 +557,7 @@
 "zoomdata",36
 "best practices",35
 "cajobspring",35
+"clanguage",35
 "collaboration",35
 "critical",35
 "employment",35
@@ -688,6 +690,7 @@
 "behavior",29
 "cajobspring san",29
 "cajobspring san francisco",29
+"clanguage cpp",29
 "comprehensive",29
 "degree quantitative",29
 "disability",29
@@ -821,7 +824,7 @@
 "practical",26
 "probability",26
 "prototyping",26
-"r matlab",26
+"rlanguage matlab",26
 "share facebook",26
 "share linkedin",26
 "share twitter",26
@@ -996,6 +999,3 @@
 "room",23
 "shell",23
 "specific",23
-"stack",23
-"streaming",23
-"successful",23
