@@ -1,7 +1,13 @@
+
 #source('wordcount.R')
+source('db_layer.r')
+
 if (!require('stringr')) install.packages('stringr')
 if (!require('dplyr')) install.packages('dplyr')
 if (!require('tidyr')) install.packages('tidyr')
+
+#set db to work with
+db_name <- "data_science_wordsuperver"
 
 # let's directly map our required list.   if wordcount.R gets us our 
 # frequency counts in an unsupervised way, wordcountSuper.R basically just
@@ -17,7 +23,11 @@ search <- function(term, df) {
 raw <- readLines('ScrapeOutput/scrapeOutput.txt', encoding = "ASCII")
 
 #read in supervised skill set:
-sup.skills<-read.csv('skills_lists.csv',stringsAsFactors = FALSE)
+
+#below line, reads in from db
+sup.skills <- lapply(getSkills('')[3], tolower)
+#below line will read in from .csv file, uncomment whichever you want to source data from 
+#sup.skills<-read.csv('skills_lists.csv',stringsAsFactors = FALSE)
 names(sup.skills)<-'skill.name'
 
 # init clean
@@ -50,5 +60,11 @@ skill.freq.df$Keyword[skill.freq.df$Keyword == "_r_"] <- "r"
 skill.freq.df$Keyword[skill.freq.df$Keyword == "_cpp_"] <- "c++"
 skill.freq.df$Keyword[skill.freq.df$Keyword == "_c_"] <- "c"
 
+
+#insert/update counts in database
+mapply(upsertSkillCount, skill.freq.df$Keyword, skill.freq.df$Freq)
+head(getSkillCounts('',''))
+
 # export csv
 write.csv(skill.freq.df, "wordcountSuper.csv", row.names=FALSE)
+

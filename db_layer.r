@@ -5,12 +5,14 @@
 library("RMySQL", lib.loc="~/R/win-library/3.3")
 library(stringr)
 
+db_name <- 'tbd'
 
 
 getDBConn <- function()
 {
     db <- dbDriver("MySQL")
-    dbConn <-dbConnect(db, user='root',password='noPassword',dbname='data_science');
+
+    dbConn <-dbConnect(db, user='root',password='noPassword',dbname= db_name)
     return(dbConn)
 }
 
@@ -26,6 +28,8 @@ getCategorys <-function(catName)
 
 
 #if skillName is "", then return all skills and ids
+
+#skill can be skill id or skillname
 getSkills <-function(skill)
 {
     con <- getDBConn()
@@ -42,6 +46,47 @@ getSkills <-function(skill)
 }
 
 
+#pass in skillID, skillName (one or other in skill param) or catg
+#if "" passed into both variables, all skillcounts returned
+getSkillCounts <- function(skill, catg)
+{
+    con <- getDBConn()
+    
+    if(is.numeric(skill))
+    {
+        if(catg == '')
+        {
+            skills <- dbGetQuery(con, str_c("CALL sp_get_skill_counts(", skill, ", null, null)"))
+        }
+        else
+        {
+            skills <- dbGetQuery(con, str_c("CALL sp_get_skill_counts(", skill, ", null, '", catg, "')"))
+        }
+        
+    }
+    else if (skill != "")
+    {
+        if(catg == '')
+        {
+            skills <- dbGetQuery(con, str_c("CALL sp_get_skill_counts(null, '", skill, "', null)"))
+        }
+        else
+        {
+            skills <- dbGetQuery(con, str_c("CALL sp_get_skill_counts(null, '", skill, "', '", catg, "')"))
+        }
+    }
+    else
+    {
+        skills <- dbGetQuery(con, "CALL sp_get_skill_counts(null, null, null)")
+    }
+    
+    
+    dbDisconnect(con)
+    return(skills)
+    
+}
+
+
 insCategoryDB <-function(catg)
 {
     con <- getDBConn()
@@ -49,13 +94,22 @@ insCategoryDB <-function(catg)
     dbDisconnect(con)
 }
 
-insSkillDB <- function(skill, catg)
+insSkillCatDB <- function(skill, catg)
 {
     con <- getDBConn()
     dbGetQuery(con, str_c("CALL sp_insert_skill ('", skill, "', '", catg, "');"))
     dbDisconnect(con)
     return()
 }
+
+insSkillNoCatDB <- function(skill)
+{
+    con <- getDBConn()
+    dbGetQuery(con, str_c("CALL sp_insert_skill ('", skill, "', '' );"))
+    dbDisconnect(con)
+    return()
+}
+
 
 
 insTransactionByNameDB <- function(skillName)
@@ -101,5 +155,18 @@ insTransactionByNameCatDB <- function(skill, catg)
         insSkillDB(skill, catg)
     }
     insTransactionByNameDB(skill)
-    
+
 }
+
+upsertSkillCount <- function(skill, sCount)
+{
+    con <- getDBConn()
+    dbGetQuery(con, str_c("CALL sp_upsert_skill_counts ('", skill, "',", sCount, ");"))   
+    dbDisconnect(con)
+}
+
+
+
+
+
+
