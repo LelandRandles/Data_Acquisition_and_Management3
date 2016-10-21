@@ -29,7 +29,7 @@ source('Project_3.R')
 
 #Parse and Count  (Unsupervised)
 ```{r}
-#if (!exists('wdcnt.df.sub')) source('wordcount.R')
+if (!exists('wdcnt.df.sub')) source('wordcount.R')
 ```
 
 #Parse and Count  (Supervised)
