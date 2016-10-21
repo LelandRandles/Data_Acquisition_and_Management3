@@ -51,7 +51,8 @@ wdcnt.df$keywords = rownames(wdcnt.df)
 wdcnt.df.melted = melt(wdcnt.df)
 wdcnt.df.melted = wdcnt.df.melted[, c(1,3)]
 colnames(wdcnt.df.melted) = c("Keyword","Freq")
-wdcnt.df.sub = top_n(arrange(wdcnt.df.melted, desc(Freq)), 1:1000)
+wdcnt.df.sub = arrange(wdcnt.df.melted, desc(Freq))
+wdcnt.df.sub <- wdcnt.df.sub[c(1:1000),]
 
 #Dump to csv file
 write.csv(wdcnt.df.sub, "wordcount.csv",row.names = F)
