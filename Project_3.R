@@ -60,7 +60,7 @@ for (i in c(1:page_no)){
 
 #To input scrape to list, comment out block bellow
 #**-- Start comment block here
-sink("scrapeOutput.txt", append = TRUE)
+sink("ScrapeOutput/scrapeOutput.txt", append = TRUE)
 for (i in 1:nrow(linksdf)) {
 
     # gets listed text
