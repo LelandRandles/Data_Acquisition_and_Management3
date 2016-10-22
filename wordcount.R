@@ -1,3 +1,5 @@
+source('db_layer.r')
+
 if (!require('rJava')) install.packages('rJava')
 if (!require('RWeka')) install.packages('RWeka')
 if (!require('tm')) install.packages('tm')
@@ -6,6 +8,8 @@ if (!require('wordcloud')) install.packages('wordcloud')
 if (!require('reshape2')) install.packages('reshape2')
 if (!require('dplyr')) install.packages('dplyr')
 
+
+db_name <- "data_science_wordver"
 
 ### Note - copy scrape output to the directory listed below
 
@@ -20,12 +24,12 @@ samp_clean = tm_map(samp, tolower)
 
 for(j in seq(samp_clean))   
 {   
-  samp_clean[[j]] = iconv(samp_clean[[j]], to="ASCII", sub = "") 
-  samp_clean[[j]] <- gsub("/|@|\\|", " ", samp_clean[[j]])
-  samp_clean[[j]] <- gsub("(?<!\\w)r(?!\\w|&D)", "rlanguage", samp_clean[[j]], perl = TRUE) #R: Rlanguage
-  samp_clean[[j]] <- gsub("(?<!\\w)c(?!\\w|#|\\+)", "clanguage", samp_clean[[j]], perl = TRUE) #C: Clanguage
-  samp_clean[[j]] <- gsub("c\\+\\+", "cpp", samp_clean[[j]], perl = TRUE) # C++: cpp
-  samp_clean[[j]] <- gsub("c#", "csharp", samp_clean[[j]], perl =TRUE) # C# CSharp
+    samp_clean[[j]] = iconv(samp_clean[[j]], to="ASCII", sub = "") 
+    samp_clean[[j]] <- gsub("/|@|\\|", " ", samp_clean[[j]])
+    samp_clean[[j]] <- gsub("(?<!\\w)r(?!\\w|&D)", "rlanguage", samp_clean[[j]], perl = TRUE) #R: Rlanguage
+    samp_clean[[j]] <- gsub("(?<!\\w)c(?!\\w|#|\\+)", "clanguage", samp_clean[[j]], perl = TRUE) #C: Clanguage
+    samp_clean[[j]] <- gsub("c\\+\\+", "cpp", samp_clean[[j]], perl = TRUE) # C++: cpp
+    samp_clean[[j]] <- gsub("c#", "csharp", samp_clean[[j]], perl =TRUE) # C# CSharp
 }  
 samp_clean = tm_map(samp_clean, PlainTextDocument)  
 samp_clean = tm_map(samp_clean, removePunctuation)
@@ -58,3 +62,15 @@ wdcnt.df.sub <- wdcnt.df.sub[c(1:1000),]
 write.csv(wdcnt.df.sub, "wordcount.csv",row.names = F)
 
 wordcloud(samp_clean, max.words = 100, random.order = F, rot.per=0.0, colors=brewer.pal(3,"Dark2" ))
+
+
+
+#save results to db
+#first add skills
+lapply(wdcnt.df.sub$Keyword, insSkillNoCatDB)
+
+#then add counts for skills
+logged <- mapply(upsertSkillCount, wdcnt.df.sub$Keyword, wdcnt.df.sub$Freq)
+#check sample in db
+head(getSkillCounts('',''))
+
