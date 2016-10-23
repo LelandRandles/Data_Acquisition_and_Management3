@@ -82,3 +82,6 @@ Next we performed a cluster analysis of the phrases we identified from the unsup
 ```{r warning = FALSE}
 source('cluster4upload.r', print.eval  = TRUE)
 ```
+  
+<iframe src="https://public.tableau.com/views/MostValuableDataScienceSkills/SkillCategoryTreeMap?:embed=y&amp:display_count=yes" width="1000" height="800"/></iframe>
+
