@@ -37,7 +37,7 @@ begin
 									inner join category c
                                     on c.ID = s.CAT_ID    
 				  where c.ID = c_id
-					and S.skill_name = s_name)						
+					and s.skill_name = s_name)						
 		then insert into SKILL(cat_id, skill_name) values (c_id, s_name) ;
 	end if;
 end//
