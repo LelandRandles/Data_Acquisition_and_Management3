@@ -6,7 +6,6 @@ __Team:__
 * Raphael Nash, Project Manager
 * Liam Byrne
 * Luis Calleja
-* Jonathan Herdnandez
 * Ravi Kothari
 * Alexader Low
 * Brandon O'Hara
